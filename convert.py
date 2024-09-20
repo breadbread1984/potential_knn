@@ -9,7 +9,6 @@ FLAGS = flags.FLAGS
 
 def add_options():
   flags.DEFINE_string('trainset', default = None, help = 'path to trainset')
-  flags.DEFINE_string('valset', default = None, help = 'path to evalset')
 
 def convert(dir_path):
   file_list = list()
@@ -34,7 +33,6 @@ def convert(dir_path):
 
 def main(unused_argv):
   convert(FLAGS.trainset)
-  convert(FLAGS.valset)
 
 if __name__ == "__main__":
   add_options()
