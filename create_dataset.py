@@ -37,6 +37,7 @@ def main(unused_argv):
       rows = cursor.fetchall()
       if len(rows) == 0: break
       for row in rows:
+        # 769(只有前面739有用) + 3 + 1 + 1
         samples.append(np.concatenate([np.array(eval(row[0])).flatten(), np.array(eval(row[3])), [row[1],], [row[2],]], axis = 0))
       start += len(rows)
       print('bond: %f fetched: %d' % (FLAGS.bond_dist, len(samples)))
