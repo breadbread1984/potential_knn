@@ -1,0 +1,5 @@
+numpy
+torch
+faiss
+absl-py
+mysql-connector-python
