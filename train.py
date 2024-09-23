@@ -30,8 +30,11 @@ def main(unused_argv):
     index = faiss.GpuIndexFlatL2(res, 739, flat_config)
   elif FLAGS.dist == 'cos':
     index = faiss.GpuIndexFlatIP(res, 739, flat_config)
-  trainset = np.load(FLAGS.trainset)
-  trainset_rho, trainset_label = trainset[:739], trainset[769:]
+  trainset = list()
+  for f in listdir(FLAGS.trainset):
+    trainset.append(np.load(join(FLAGS.trainset, f)))
+  trainset = np.concatenate(trainset, axis = 0)
+  trainset_rho, trainset_label = trainset[:,:739], trainset[:,769:]
   assert trainset_label.shape[1] == 5
   faiss.normalize_L2(trainset_rho)
   index.add(trainset_rho)
