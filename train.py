@@ -8,6 +8,7 @@ import numpy as np
 import torch
 from torch import nn, device, save, load, no_grad, autograd
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
 from torch.optim import Adam
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 from models import WeightModel
@@ -44,6 +45,8 @@ def main(unused_argv):
   faiss.normalize_L2(trainset_rho)
   index.add(trainset_rho)
   # 2) training
+  if not exists(FLAGS.ckpt): mkdir(FLAGS.ckpt)
+  tb_writer = SummaryWriter(log_dir = join(FLAGS.ckpt, 'summaries'))
   evalset = RhoDataset(FLAGS.evalset)
   loader = DataLoader(evalset, batch_size = FLAGS.batch, shuffle = True)
   model = WeightModel(FLAGS.k).to('cuda')
@@ -51,7 +54,7 @@ def main(unused_argv):
   scheduler = CosineAnnealingWarmRestarts(optimizer, T_0 = 5, T_mult = 2)
   mae = nn.L1Loss()
   for epoch in range(FLAGS.epochs):
-    for rho, pos, exc, vxc in loader:
+    for step, (rho, pos, exc, vxc) in enumerate(loader):
       # search for NN
       faiss.normalize_L2(rho.cpu().numpy())
       D, I = index.search(rho, FLAGS.k) # D.shape = (batch, k) I.shape = (batch, k)
@@ -70,6 +73,11 @@ def main(unused_argv):
       loss = loss1 + loss2
       loss.backward()
       optimizer.step()
+      global_steps = epoch * len(loader) + step
+      if global_steps % 100 == 0:
+        print(f'Step #{global_steps} exc MAE:{loss1} vxc MAE:{loss2} lr: {scheduler.get_last_lr()[0]}')
+        tb_writer.add_scalar('exc loss', loss1, global_steps)
+        tb_writer.add_scalar('vxc loss', loss2, global_steps)
     ckpt = {'epoch': epoch,
             'state_dict': model.state_dict(),
             'optimizer': optimizer.state_dict(),
