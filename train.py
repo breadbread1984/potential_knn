@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from os import listdir
+from os import listdir, mkdir
 from os.path import join, exists, splitext
 from absl import flags, app
 import faiss
