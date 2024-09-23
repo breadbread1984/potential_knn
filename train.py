@@ -32,6 +32,7 @@ def main(unused_argv):
     index = faiss.GpuIndexFlatIP(res, 739, flat_config)
   trainset = np.load(FLAGS.trainset)
   trainset_rho, trainset_label = trainset[:739], trainset[769:]
+  assert trainset_label.shape[1] == 5
   faiss.normalize_L2(trainset_rho)
   index.add(trainset_rho)
   # 2) training
