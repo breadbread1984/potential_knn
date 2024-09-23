@@ -54,7 +54,7 @@ class RhoDataset(Dataset):
       for f in files:
         stem, ext = splitext(f)
         if ext != '.npy': continue
-        self.npys.append(np.load(f, mmap_mode = 'r'))
+        self.npys.append(np.load(join(root, f), mmap_mode = 'r'))
     self.start_indices = [0] * len(self.npys)
     self.data_count = 0
     for index, memmap in enumerate(self.npys):
