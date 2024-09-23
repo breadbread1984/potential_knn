@@ -14,7 +14,7 @@ class WeightModel(nn.Module):
     results = self.dense1(results) # x.shape = (batch, 739, neighbor_num)
     results = self.gelu1(results)
     results = torch.permute(results, (0,2,1)) # x.shape = (batch, neighbor_num, 739)
-    results = torch.squeeze(self.dense2(results), dim = -1) # x.shape = (batch, neighbor_num)
-    results = torch.softmax(results, dim = -1) # results.shape = (batch, neighbor_num)
+    results = self.dense2(results) # x.shape = (batch, neighbor_num, 1)
+    results = torch.softmax(results, dim = 1) # results.shape = (batch, neighbor_num, 1)
     return results
 
