@@ -3,6 +3,7 @@
 from os import listdir
 from absl import flags, app
 import faiss
+import numpy as np
 import torch
 from torch import nn, device, save, load, no_grad, autograd
 from torch.optim import Adam
