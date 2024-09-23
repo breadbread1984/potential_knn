@@ -21,7 +21,7 @@ def add_options():
   flags.DEFINE_string('evalset', default = None, help = 'path to evalset npy')
   flags.DEFINE_float('lr', default = 1e-3, help = 'learning rate')
   flags.DEFINE_integer('k', default = 4, help = 'nearest neighbor number')
-  flags.DEFINE_integer('batch', default = 128, help = 'batch size')
+  flags.DEFINE_integer('batch', default = 1024, help = 'batch size')
   flags.DEFINE_enum('dist', default = 'l2', enum_values = {'l2','cos'}, help = 'distance type')
   flags.DEFINE_string('ckpt', default = 'ckpt', help = 'path to checkpoint')
   flags.DEFINE_integer('epochs', default = 200, help = 'number of epochs')
@@ -69,14 +69,14 @@ def main(unused_argv):
       x = torch.cat([torch.unsqueeze(rho, dim = 1), neighbor], dim = 1) # x.shape = (batch, k+1, 739)
       weights = model(x) # weights.shape = (batch, k, 1)
       pred_exc = torch.sum(weights * neighbor_exc, dim = (1,2)) # pred_exc.shape = (batch)
-      pred_vxc = autograd.grad(torch.sum(rho[:,rho.shape[1]//2] * pred_exc), rho, create_graph = True)[0][:,rho.shape[1]//2] # pred_vxc.shape = (batch)
+      pred_vxc = autograd.grad(torch.sum(rho[:,rho.shape[1]//2] * pred_exc), rho, create_graph = True)[0][:,rho.shape[1]//2] + pred_exc # pred_vxc.shape = (batch)
       loss1 = mae(exc, pred_exc)
       loss2 = mae(vxc, pred_vxc)
       loss = loss1 + loss2
       loss.backward()
       optimizer.step()
       global_steps = epoch * len(loader) + step
-      if global_steps % 100 == 0:
+      if global_steps % 1000 == 0:
         print(f'Step #{global_steps} exc MAE:{loss1} vxc MAE:{loss2} lr: {scheduler.get_last_lr()[0]}')
         tb_writer.add_scalar('exc loss', loss1, global_steps)
         tb_writer.add_scalar('vxc loss', loss2, global_steps)
