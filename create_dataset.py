@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
 from shutil import rmtree
-from os import mkdir, listdir
+from os import mkdir, listdir, walk
 from os.path import exists, join, splitext
 from absl import flags, app
+from bisect import bisect
 import mysql.connector
 import numpy as np
 from bisect import bisect
@@ -45,6 +46,31 @@ def main(unused_argv):
       break
   output = np.stack(samples, axis = 0)
   np.save(join(FLAGS.output, '%s_%f.npy' % (FLAGS.smiles, FLAGS.bond_dist)), output)
+
+class evalset(Dataset):
+  def __init__(self, dir_path):
+    self.npys = list()
+    for root, dirs, files in walk(dir_path):
+      for f in files:
+        stem, ext = splitext(f)
+        if ext != '.npy': continue
+        self.npys.append(np.load(f, mmap_mode = 'r'))
+    self.start_indices = [0] * len(self.npys)
+    self.data_count = 0
+    for index, memmap in enumerate(self.npys):
+      self.start_indices[index] = self.data_count
+      self.data_count += memmap.shape[0]
+  def __len__(self):
+    return self.data_count
+  def __getitem__(self, index):
+    memmap_index = bisect(self.start_indeices, index) - 1
+    index_in_memmap = index - self.start_indices[memmap_index]
+    data = self.npys[memmap_index][index_in_memmap]
+    rho = data[:739]
+    pos = data[769:769 + 3]
+    exc = data[769 + 3]
+    vxc = data[769 + 4]
+    return rho, pos, exc, vxc
 
 if __name__ == "__main__":
   add_options()
