@@ -7,6 +7,7 @@ import faiss
 import numpy as np
 import torch
 from torch import nn, device, save, load, no_grad, autograd
+from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 from models import WeightModel
@@ -44,12 +45,13 @@ def main(unused_argv):
   index.add(trainset_rho)
   # 2) training
   evalset = RhoDataset(FLAGS.evalset)
+  loader = DataLoader(evalset, batch_size = FLAGS.batch, shuffle = True)
   model = WeightModel(FLAGS.k).to('cuda')
   optimizer = Adam(model.parameters(), lr = FLAGS.lr)
   scheduler = CosineAnnealingWarmRestarts(optimizer, T_0 = 5, T_mult = 2)
   mae = nn.L1Loss()
   for epoch in range(FLAGS.epochs):
-    for rho, pos, exc, vxc in evalset:
+    for rho, pos, exc, vxc in loader:
       # search for NN
       faiss.normalize_L2(rho.cpu().numpy())
       D, I = index.search(rho, FLAGS.k) # D.shape = (batch, k) I.shape = (batch, k)
