@@ -66,10 +66,10 @@ class RhoDataset(Dataset):
     memmap_index = bisect(self.start_indices, index) - 1
     index_in_memmap = index - self.start_indices[memmap_index]
     data = self.npys[memmap_index][index_in_memmap]
-    rho = data[:739]
+    rho = data[:739].astype(np.float32)
     pos = data[769:769 + 3]
-    exc = data[769 + 3]
-    vxc = data[769 + 4]
+    exc = data[769 + 3].astype(np.float32)
+    vxc = data[769 + 4].astype(np.float32)
     return rho, pos, exc, vxc
 
 if __name__ == "__main__":
