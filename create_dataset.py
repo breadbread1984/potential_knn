@@ -63,7 +63,7 @@ class RhoDataset(Dataset):
   def __len__(self):
     return self.data_count
   def __getitem__(self, index):
-    memmap_index = bisect(self.start_indeices, index) - 1
+    memmap_index = bisect(self.start_indices, index) - 1
     index_in_memmap = index - self.start_indices[memmap_index]
     data = self.npys[memmap_index][index_in_memmap]
     rho = data[:739]
