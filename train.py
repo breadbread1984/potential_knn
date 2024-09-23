@@ -40,7 +40,7 @@ def main(unused_argv):
   trainset = np.concatenate(trainset, axis = 0)
   trainset_rho, trainset_label = trainset[:,:739], trainset[:,769:]
   assert trainset_label.shape[1] == 5
-  faiss.normalize_L2(trainset_rho)
+  faiss.normalize_L2(np.ascontiguousarray(trainset_rho))
   index.add(trainset_rho)
   # 2) training
   evalset = RhoDataset(FLAGS.evalset)
