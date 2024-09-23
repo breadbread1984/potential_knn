@@ -16,7 +16,7 @@ def convert(dir_path):
   for root, dirs, files in walk(dir_path):
     for f in files:
       stem, ext = splitext(f)
-      if ext != '.npy': break
+      if ext != '.npy': continue
       file_list.append(join(root, f))
       data = np.load(join(root, f))
       assert data.shape[1] == 769 + 3 + 1 + 1
