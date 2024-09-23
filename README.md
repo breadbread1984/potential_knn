@@ -40,5 +40,5 @@ python3 train.py --trainset <path/to/trainset/dir> --evalset <path/to/evalset/di
 ## Evaluate model
 
 ```shell
-python3 evaluate.py --trainset <path/to/trainset/dir> --evalset <path/to/evalset/dir>
+python3 evaluate.py --trainset <path/to/trainset/dir> --evalset <path/to/evalset/dir> --ckpt <path/to/model.pth>
 ```
