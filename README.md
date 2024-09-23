@@ -31,8 +31,14 @@ mkdir dataset
 bash download_datasets.sh
 ```
 
-## Training model
+## Train model
 
 ```shell
 python3 train.py --trainset <path/to/trainset/dir> --evalset <path/to/evalset/dir>
+```
+
+## Evaluate model
+
+```shell
+python3 evaluate.py --trainset <path/to/trainset/dir> --evalset <path/to/evalset/dir>
 ```
