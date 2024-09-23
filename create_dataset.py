@@ -47,7 +47,7 @@ def main(unused_argv):
   output = np.stack(samples, axis = 0)
   np.save(join(FLAGS.output, '%s_%f.npy' % (FLAGS.smiles, FLAGS.bond_dist)), output)
 
-class evalset(Dataset):
+class RhoDataset(Dataset):
   def __init__(self, dir_path):
     self.npys = list()
     for root, dirs, files in walk(dir_path):
