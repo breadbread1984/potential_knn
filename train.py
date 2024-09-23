@@ -85,7 +85,7 @@ def main(unused_argv):
             'optimizer': optimizer.state_dict(),
             'scheduler': scheduler}
     save(ckpt, join(FLAGS.ckpt, 'model.pth'))
-  scheduler.step()
+    scheduler.step()
 
 if __name__ == "__main__":
   add_options()
