@@ -20,7 +20,7 @@ def add_options():
   flags.DEFINE_string('evalset', default = None, help = 'path to evalset npy')
   flags.DEFINE_float('lr', default = 1e-3, help = 'learning rate')
   flags.DEFINE_integer('k', default = 4, help = 'nearest neighbor number')
-  flags.DEFINE_integer('batch', default = 32, help = 'batch size')
+  flags.DEFINE_integer('batch', default = 128, help = 'batch size')
   flags.DEFINE_enum('dist', default = 'l2', enum_values = {'l2','cos'}, help = 'distance type')
   flags.DEFINE_string('ckpt', default = 'ckpt', help = 'path to checkpoint')
   flags.DEFINE_integer('epochs', default = 200, help = 'number of epochs')
