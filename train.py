@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from os import listdir
 from absl import flags, app
 import faiss
 import torch
@@ -30,6 +31,7 @@ def main(unused_argv):
     index = faiss.GpuIndexFlatL2(res, 739, flat_config)
   elif FLAGS.dist == 'cos':
     index = faiss.GpuIndexFlatIP(res, 739, flat_config)
+  print('load trainset')
   trainset = list()
   for f in listdir(FLAGS.trainset):
     trainset.append(np.load(join(FLAGS.trainset, f)))
