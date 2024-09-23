@@ -63,6 +63,8 @@ def main(unused_argv):
       neighbor_vxc = torch.from_numpy(trainset_label[I,4:5]).to('cuda') # neighbor_vxc.shape = (batch,k,1)
       # train weight model
       rho = rho.to('cuda') # rho.shape = (batch, 739)
+      exc = exc.to('cuda')
+      vxc = vxc.to('cuda')
       rho.requires_grad = True
       x = torch.cat([torch.unsqueeze(rho, dim = 1), neighbor], dim = 1) # x.shape = (batch, k+1, 739)
       weights = model(x) # weights.shape = (batch, k, 1)
