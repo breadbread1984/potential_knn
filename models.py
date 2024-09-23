@@ -5,6 +5,7 @@ from torch import nn
 
 class WeightModel(nn.Module):
   def __init__(self, neighbor_num = 4):
+    super(WeightModel,self).__init__()
     self.dense1 = nn.Linear(neighbor_num + 1, neighbor_num)
     self.gelu1 = nn.GELU()
     self.dense2 = nn.Linear(739, 1)
