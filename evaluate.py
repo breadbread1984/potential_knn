@@ -2,6 +2,7 @@
 
 from absl import flags, app
 from os import listdir
+from os.path import join, exists, splitext
 import faiss
 import numpy as np
 import torch
