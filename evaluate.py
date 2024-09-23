@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from absl import flags, app
+from os import listdir
 import faiss
 import numpy as np
 import torch
