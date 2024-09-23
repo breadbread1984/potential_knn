@@ -55,7 +55,7 @@ def main(unused_argv):
       # search for NN
       faiss.normalize_L2(rho.cpu().numpy())
       D, I = index.search(rho, FLAGS.k) # D.shape = (batch, k) I.shape = (batch, k)
-      neighbor = torch.from_numpy(trainset[I,:]).to('cuda') # neighbor.shape = (batch, k, 739)
+      neighbor = torch.from_numpy(trainset_rho[I,:]).to('cuda') # neighbor.shape = (batch, k, 739)
       neighbor_exc = torch.from_numpy(trainset_label[I,3:4]).to('cuda') # neighbor_exc.shape = (batch,k,1)
       neighbor_vxc = torch.from_numpy(trainset_label[I,4:5]).to('cuda') # neighbor_vxc.shape = (batch,k,1)
       # train weight model
