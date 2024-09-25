@@ -70,8 +70,8 @@ def main(unused_argv):
       weights = model(x) # weights.shape = (batch, k, 1)
       pred_exc = torch.sum(weights * neighbor_exc, dim = (1,2)) # pred_exc.shape = (batch)
       pred_vxc = autograd.grad(torch.sum(rho[:,rho.shape[1]//2] * pred_exc), rho, create_graph = True)[0][:,rho.shape[1]//2] + pred_exc # pred_vxc.shape = (batch)
-      loss1 = mae(exc, pred_exc)
-      loss2 = mae(vxc, pred_vxc)
+      loss1 = mae(pred_exc, exc)
+      loss2 = mae(pred_vxc, vxc)
       loss = loss1 + loss2
       loss.backward()
       optimizer.step()
