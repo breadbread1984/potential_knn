@@ -13,7 +13,7 @@ mkdir build && cd build
 cmake .. -DFAISS_ENABLE_GPU=ON -DFAISS_ENABLE_PYTHON=ON -DCMAKE_BUILD_TYPE=Release -DCUDAToolkit_ROOT=/usr/local/cuda-12.3 -DBUILD_TESTING=OFF
 make -j32
 cd faiss/python
-python3 setup.py bdist
+python3 setup.py bdist_wheel
 cd dist
 python3 -m pip install faiss-1.8.0-py3-none-any.whl
 ```
